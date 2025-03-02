@@ -3,7 +3,19 @@ const Earnings = require('../models/earnings');
 const referralEarnings = require('../models/referralEarnings');
 const { calculateReferralEarnings } = require('../utils/functions');
 
-const updateUserBalance = async (req, res) => {
+/**
+ * Updates the user's balance based on their earnings and referral earnings.
+ *
+ * @async
+ * @function TotalUserPoints
+ * @param {Object} req - The request object.
+ * @param {Object} req.params - The request parameters.
+ * @param {string} req.params.userId - The ID of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the user's balance is updated.
+ * @throws {Error} - Throws an error if there is a server error.
+ */
+const TotalUserPoints = async (req, res) => {
     try {
         const { userId } = req.params;
 
@@ -11,8 +23,13 @@ const updateUserBalance = async (req, res) => {
             return res.status(400).json({ message: 'userModel ID and balance are required' });
         }
 
-        const earnings = await Earnings.find({ user_id: userId });
         const user = await userModel.findById({ _id: userId })
+
+        if(!user){
+            return res.status(400).json({ message: 'User not found' });
+        }
+        const earnings = await Earnings.find({ user_id: userId });
+
         const referralEarningsDeatils = await referralEarnings.find({ user_id: userId });
 
         const totalPoints = earnings.reduce((sum, earning) => sum + earning.points_earned, 0);
@@ -29,7 +46,18 @@ const updateUserBalance = async (req, res) => {
     }
 };
 
-function playGame(req, res) {
+/**
+ * Handles the game play request, records the earning, and responds with the result.
+ * @function recordGamePlay
+ * @param {Object} req - The request object.
+ * @param {Object} req.params - The request parameters.
+ * @param {string} req.params.userId - The ID of the user playing the game.
+ * @param {Object} req.body - The request body.
+ * @param {number} req.body.balance - The balance to be deducted as points earned.
+ * @param {Object} res - The response object.
+ * @returns {Object} The response object with status and message.
+ */
+function recordGamePlay(req, res) {
     const { userId } = req.params;
     const { balance } = req.body;
 
@@ -51,8 +79,18 @@ function playGame(req, res) {
         });
 }
 
+/**
+ * Controller to handle fetching earnings for a specific user.
+ *
+ * @async
+ * @function EarningsController
+ * @param {Object} req - Express request object.
+ * @param {Object} req.params - Request parameters.
+ * @param {string} req.params.userId - ID of the user whose earnings are to be fetched.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} Sends a JSON response with the user's earnings or an error message.
+ */
 async function EarningsController(req, res) {
-    console.log('hello')
     const { userId } = req.params;
 
     if (!userId) {
@@ -69,7 +107,22 @@ async function EarningsController(req, res) {
     }
 }
 
-async function GameDecisionController(req, res) {
+/**
+ * Controller for handling game decisions and recording earnings.
+ * 
+ * @async
+ * @function recordGameOutcome
+ * @param {Object} req - Express request object.
+ * @param {Object} req.params - Request parameters.
+ * @param {string} req.params.userId - ID of the user making the decision.
+ * @param {Object} req.body - Request body.
+ * @param {string} req.body.decision - Decision made by the user ('win' or other).
+ * @param {number} req.body.stakeAmount - Amount of stake involved in the game.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} - Returns a promise that resolves to void.
+ * @throws {Error} - Throws an error if there is a server error.
+ */
+async function recordGameOutcome(req, res) {
 
     const { userId } = req.params;
     const { decision, stakeAmount } = req.body;
@@ -102,7 +155,7 @@ async function GameDecisionController(req, res) {
             if (!!user.referredBy) {
            
                 newReferralearning = new referralEarnings({
-                    referral_id: user.referredBy,
+                    referrer_id: user.referredBy,
                     referred_id: userId,
                     earning_type: 'Game Played',
                     points_earned: ReferralCommisionAmount
@@ -128,4 +181,7 @@ async function GameDecisionController(req, res) {
     }
 }
 
-module.exports = { updateUserBalance, playGame, EarningsController, GameDecisionController };
+module.exports = { TotalUserPoints,
+    recordGamePlay,
+    EarningsController,
+    recordGameOutcome, };

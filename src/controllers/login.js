@@ -2,6 +2,19 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/User');
 
+/**
+ * Handles user login by verifying email and password, generating a JWT token, and setting it as a cookie.
+ *
+ * @async
+ * @function Login
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.email - The email of the user attempting to log in.
+ * @param {string} req.body.password - The password of the user attempting to log in.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} - Returns a promise that resolves to void.
+ * @throws {Error} - Throws an error if there is a server issue.
+ */
 async function Login(req, res) {
     const { email, password } = req.body;
 

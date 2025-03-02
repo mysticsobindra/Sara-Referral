@@ -1,5 +1,19 @@
 const Earnings = require("../models/earnings");
 
+/**
+ * Updates the total points for a user by recording a deposit.
+ *
+ * @async
+ * @function updateTotalPoints
+ * @param {Object} req - The request object.
+ * @param {Object} req.params - The request parameters.
+ * @param {string} req.params.userId - The ID of the user.
+ * @param {Object} req.body - The request body.
+ * @param {number} req.body.Balance - The balance to be added as points.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ * @throws {Error} - Throws an error if there is a server error.
+ */
 const updateTotalPoints = async (req, res) => {
     const { userId } = req.params;
     const { Balance } = req.body;

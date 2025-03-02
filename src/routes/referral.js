@@ -1,19 +1,15 @@
-
-
 const express = require("express");
 const router = express.Router()
-const { GenerateReferralCode, validateReferralCode, registerWithReferralCode, getReferralHistroy } = require("../controllers/referral");
+const { GenerateReferralCode, validateReferralCode, getTopReferrals, getYourReferrals, getReferralHistroy } = require("../controllers/referral");
 
 router.post("/generate", GenerateReferralCode);
 router.get("/validate/:referralCode", validateReferralCode);
-router.post("/register/:referralCode", registerWithReferralCode);
 router.get("/histroy/:userId", getReferralHistroy);
+router.get("/yourReferrals/:userId", getYourReferrals);
+router.get("/topReferrals", getTopReferrals);
+
 
 module.exports = router;
-
-
-
-
 
 /**
  * @swagger
@@ -184,6 +180,12 @@ module.exports = router;
  *           type: string
  *         required: false
  *         description: Filter by earning type
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: Filter by number of days
  *     responses:
  *       200:
  *         description: Referral history retrieved successfully
@@ -199,7 +201,7 @@ module.exports = router;
  *                     properties:
  *                       _id:
  *                         type: string
- *                       referral_id:
+ *                       referrer_id:
  *                         type: string
  *                       referred_id:
  *                         type: string
@@ -214,27 +216,117 @@ module.exports = router;
  *                         type: number
  *               example:
  *                 referralHistory: 
- *                   - _id: "67b814dbbdf5810b8023f179"
- *                     referral_id: "67b81477bdf5810b8023f16b"
- *                     referred_id: "67b814dbbdf5810b8023f177"
+ *                   - _id: "67b84db27e39006ca19a81b9"
+ *                     referrer_id: "67b84da07e39006ca19a81b2"
+ *                     referred_id: "67b84db27e39006ca19a81b7"
  *                     earning_type: "New Referral"
  *                     points_earned: 100
- *                     created_at: "2025-02-21T05:53:31.153Z"
+ *                     created_at: "2025-02-21T09:56:02.245Z"
  *                     __v: 0
- *                   - _id: "67b815f6bdf5810b8023f1b7"
- *                     referral_id: "67b81477bdf5810b8023f16b"
- *                     referred_id: "67b815f6bdf5810b8023f1b5"
- *                     earning_type: "New Referral"
- *                     points_earned: 100
- *                     created_at: "2025-02-21T05:58:14.972Z"
- *                     __v: 0
- *                   - _id: "67b820c580a5345e68f81133"
- *                     referral_id: "67b81477bdf5810b8023f16b"
- *                     referred_id: "67b820c580a5345e68f81131"
- *                     earning_type: "New Referral"
- *                     points_earned: 100
- *                     created_at: "2025-02-21T06:44:21.352Z"
+ *                   - _id: "67b84ed0e6fb58efe8e26f73"
+ *                     referrer_id: "67b84da07e39006ca19a81b2"
+ *                     referred_id: "67b84db27e39006ca19a81b7"
+ *                     earning_type: "Game Played"
+ *                     points_earned: 2
+ *                     created_at: "2025-02-21T10:00:48.546Z"
  *                     __v: 0
  *       400:
  *         description: Bad request
  */
+
+
+/**
+ * @swagger
+ * /referral/yourReferrals/{userId}:
+ *   get:
+ *     summary: Get your referrals and total points gained
+ *     tags: [Referral]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID to get referrals for
+ *     responses:
+ *       200:
+ *         description: Referrals and total points retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 referrals:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       referredUser:
+ *                         type: string
+ *                       referralDate:
+ *                         type: string
+ *                       pointsEarned:
+ *                         type: Number
+ *                 totalPoints:
+ *                   type: number
+ *               example:
+ *                 referrals:
+ *                   - referredUser: "test1@gmail.com"
+ *                     referralDate: "2025-02-21T05:53:31.153Z"
+ *                     pointsEarned: "124"
+ *                 totalPoints: 124
+ *       400:
+ *         description: Bad request
+ */
+
+
+/**
+ * @swagger
+ * /referral/topReferrals:
+ *   get:
+ *     summary: Get top referrals and their total points
+ *     tags: [Referral]
+ *     responses:
+ *       200:
+ *         description: Top referrals and total points retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 topReferrals:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       referrerId:
+ *                         type: string
+ *                       totalPoints:
+ *                         type: number
+ *                       referrals:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             referredUser:
+ *                               type: object
+ *                               properties:
+ *                                 _id:
+ *                                   type: string
+ *                                 email:
+ *                                   type: string
+ *                             pointsEarned:
+ *                               type: number
+ *               example:
+ *                 topReferrals:
+ *                   - referrerId: "67b84da07e39006ca19a81b2"
+ *                     totalPoints: 112
+ *                     referrals:
+ *                       - referredUser:
+ *                           _id: "67b84db27e39006ca19a81b7"
+ *                           email: "test2@gmail.com"
+ *                         pointsEarned: 112
+ *       400:
+ *         description: Bad request
+ */
+

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const earningsSchema = new Schema({
-    referral_id: {
+    referrer_id: {
         type: String,
         required: true,
         ref: 'User'

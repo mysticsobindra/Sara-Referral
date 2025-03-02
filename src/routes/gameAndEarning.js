@@ -1,23 +1,24 @@
-
-
 const express = require("express");
-const { updateUserBalance, playGame, EarningsController, GameDecisionController } = require("../controllers/game");
-const router = express.Router()
+const {
+TotalUserPoints,
+  recordGamePlay,
+  EarningsController,
+  recordGameOutcome,
+} = require("../controllers/game");
+const router = express.Router();
 
-router.post("/play/:userId", playGame);
-router.get("/balance/:userId", updateUserBalance);
+router.post("/play/:userId", recordGamePlay);
+router.get("/points/:userId", TotalUserPoints);
 router.get("/histroy/:userId", EarningsController);
-router.post("/gameDecision/:userId", GameDecisionController);
+router.post("/gameDecision/:userId", recordGameOutcome);
 
 module.exports = router;
-
-
 
 /**
  * @swagger
  * /game/play/{userId}:
  *   post:
- *     summary: Play a game
+ *     summary: Record a Game Play
  *     tags: [Game]
  *     parameters:
  *       - in: path
@@ -37,7 +38,7 @@ module.exports = router;
  *                 type: number
  *     responses:
  *       200:
- *         description: Game played successfully
+ *         description: Recorded Game played successfully
  *         content:
  *           application/json:
  *             schema:
@@ -60,7 +61,7 @@ module.exports = router;
  *                       type: string
  *                       format: date-time
  *               example:
- *                 message: "Game played and earning recorded successfully"
+ *                 message: " Game played and earning recorded successfully"
  *                 newEarning:
  *                   user_id: "67b814dbbdf5810b8023f177"
  *                   earning_type: "Game Played"
@@ -76,7 +77,7 @@ module.exports = router;
  * @swagger
  * /game/balance/{userId}:
  *   get:
- *     summary: Get user balance
+ *     summary: Get user current Total Points
  *     tags: [Game]
  *     parameters:
  *       - in: path
@@ -129,7 +130,7 @@ module.exports = router;
  *                     properties:
  *                       _id:
  *                         type: string
- *                       referral_id:
+ *                       referrer_id:
  *                         type: string
  *                       referred_id:
  *                         type: string
@@ -143,7 +144,7 @@ module.exports = router;
  *                       __v:
  *                         type: number
  *               example:
- *                 earnings: 
+ *                 earnings:
  *                   - _id: "67b82a517c4c9182dda8eff1"
  *                     user_id: "67b820c580a5345e68f81131"
  *                     earning_type: "Game Played"
@@ -154,12 +155,11 @@ module.exports = router;
  *         description: Bad request
  */
 
-
 /**
  * @swagger
  * /game/gameDecision/{userId}:
  *   post:
- *     summary: Make a game decision
+ *     summary: Record a game Outcome
  *     tags: [Game]
  *     parameters:
  *       - in: path
@@ -167,7 +167,7 @@ module.exports = router;
  *         schema:
  *           type: string
  *         required: true
- *         description: User ID to make a game decision for
+ *         description: User ID to Record a game Outcome for
  *     requestBody:
  *       required: true
  *       content:
@@ -206,7 +206,7 @@ module.exports = router;
  *                 newReferralearning:
  *                   type: object
  *                   properties:
- *                     referral_id:
+ *                     referrer_id:
  *                       type: string
  *                     referred_id:
  *                       type: string
@@ -229,7 +229,7 @@ module.exports = router;
  *                   created_at: "2025-02-21T07:14:30.991Z"
  *                   __v: 0
  *                 newReferralearning:
- *                   referral_id: "67b81477bdf5810b8023f16b"
+ *                   referrer_id: "67b81477bdf5810b8023f16b"
  *                   referred_id: "67b814dbbdf5810b8023f177"
  *                   earning_type: "Game Played"
  *                   points_earned: 2

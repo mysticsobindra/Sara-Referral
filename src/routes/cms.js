@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const { updateTotalPoints } = require("../controllers/cms");
 const router = express.Router()
