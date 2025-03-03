@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/User');
+const { generateToken } = require('../services/Token');
+const RefreshToken = require('../models/refreshToken');
 
 /**
  * Handles user login by verifying email and password, generating a JWT token, and setting it as a cookie.
@@ -18,7 +20,6 @@ const userModel = require('../models/User');
 async function Login(req, res) {
     // Extract the email and password from the request body
     const { email, password } = req.body;
-
     try {
         // Check if the user exists
         const user = await userModel.findOne({ email });
@@ -34,11 +35,17 @@ async function Login(req, res) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        // Generate a JWT token
-        const token = jwt.sign({ user}, process.env.JWT_SECRET, { expiresIn: '10d' });
+        // Generate a access and refresh token
+        const ACCESS_TOKEN=  generateToken({...user}, process.env.ACCESS_TOKEN_SECRET,"1min")
+        const REFRESH_TOKEN=  generateToken({...user}, process.env.REFRESH_TOKEN_SECRET,'7d')
 
-        // Set the token as a cookie
-        res.cookie('token', token, { httpOnly: true, maxAge: 10 * 24 * 60 * 60 * 1000 });
+        // Save the refresh token in the database
+        await RefreshToken.create({ refreshToken: REFRESH_TOKEN, userId: user._id });
+
+        // Set the access and refresh token as cookies
+        res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+        res.cookie('REFRESH_TOKEN', REFRESH_TOKEN, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
         return res.json({ message: 'Login successful' });
 
     } catch (err) {

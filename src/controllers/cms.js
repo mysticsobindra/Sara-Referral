@@ -20,17 +20,17 @@ const updateTotalPoints = async (req, res) => {
   const { Balance } = req.body;
   try {
     // Check if the user ID and balance are provided
-    const newEarning = new Earnings({
+    const new_Earning = new Earnings({
       user_id: userId,
       earning_type: "Deposit",
       points_earned: Balance,
     });
 
     // Save the new earning
-    newEarning
+    new_Earning
       .save()
       .then(() => {
-        res.status(200).json({ message: "Deposit successfully", newEarning });
+        res.status(200).json({ message: "Deposit successfully", new_Earning });
       })
       .catch((error) => {
         res.status(500).json({ message: "Error recording Deposit", error });
@@ -39,7 +39,7 @@ const updateTotalPoints = async (req, res) => {
     // Send a response
     res
       .status(200)
-      .json({ message: "Total points updated successfully", newEarning });
+      .json({ message: "Total points updated successfully", new_Earning });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

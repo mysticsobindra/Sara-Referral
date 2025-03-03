@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post("/play/:userId", recordGamePlay);
 router.patch("/points/:userId", TotalUserPoints);
-router.get("/histroy/:userId", EarningsController);
+router.get("/history/:userId", EarningsController);
 router.post("/gameDecision/:userId", recordGameOutcome);
 
 module.exports = router;
@@ -18,7 +18,7 @@ module.exports = router;
  * @swagger
  * /game/play/{userId}:
  *   post:
- *     summary: Record a Game Play
+ *     summary: Handles the game play request, records the earning, and responds with the result.
  *     tags: [Game]
  *     parameters:
  *       - in: path
@@ -104,7 +104,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /game/histroy/{userId}:
+ * /game/history/{userId}:
  *   get:
  *     summary: Get earnings history of a user
  *     tags: [Game]
@@ -203,7 +203,7 @@ module.exports = router;
  *                     created_at:
  *                       type: string
  *                       format: date-time
- *                 newReferralearning:
+ *                 new_Referral_learning:
  *                   type: object
  *                   properties:
  *                     referrer_id:
@@ -228,7 +228,7 @@ module.exports = router;
  *                   _id: "67b827d66fedb2edae52116d"
  *                   created_at: "2025-02-21T07:14:30.991Z"
  *                   __v: 0
- *                 newReferralearning:
+ *                 new_Referral_learning:
  *                   referrer_id: "67b81477bdf5810b8023f16b"
  *                   referred_id: "67b814dbbdf5810b8023f177"
  *                   earning_type: "Game Played"

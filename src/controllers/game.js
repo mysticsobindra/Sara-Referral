@@ -30,16 +30,16 @@ const TotalUserPoints = async (req, res) => {
         }
         const earnings = await Earnings.find({ user_id: userId });
 
-        const referralEarningsDeatils = await referralEarnings.find({ user_id: userId });
+        const referral_Earnings_Details = await referralEarnings.find({ user_id: userId });
 
         const totalPoints = earnings.reduce((sum, earning) => sum + earning.points_earned, 0);
-        const totalreferralPoints = referralEarningsDeatils.reduce((sum, earning) => sum + earning.points_earned, 0);
+        const total_referral_Points = referral_Earnings_Details.reduce((sum, earning) => sum + earning.points_earned, 0);
 
-        const CurrentBalance = totalPoints + totalreferralPoints;
+        const Current_Balance = totalPoints + total_referral_Points;
 
-        await userModel.findByIdAndUpdate({ _id: userId }, { Balance: CurrentBalance });
+        await userModel.findByIdAndUpdate({ _id: userId }, { Balance: Current_Balance });
 
-        res.status(200).json({ CurrentBalance });
+        res.status(200).json({ Current_Balance });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
@@ -70,16 +70,16 @@ function recordGamePlay(req, res) {
     }
 
     // Create a new earning record
-    const newEarning = new Earnings({
+    const new_Earning = new Earnings({
         user_id: userId,
-        earning_type: 'Game Played',
+        earning_type: 'Game_Played',
         points_earned: -balance
     });
 
     // Save the earning record
-    newEarning.save()
+    new_Earning.save()
         .then(() => {
-            res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning });
+            res.status(200).json({ message: 'Game played and earning recorded successfully', new_Earning });
         })
         .catch((error) => {
             res.status(500).json({ message: 'Error recording earning', error });
@@ -147,16 +147,16 @@ async function recordGameOutcome(req, res) {
         // Check if the decision is 'win' or 'lose'
         if (decision == 'win') {
             // Create a new earning record
-            const newEarning = new Earnings({
+            const new_Earning = new Earnings({
                 user_id: userId,
-                earning_type: 'Game Played',
+                earning_type: 'Game_Played',
                 points_earned: stakeAmount
             });
 
             // Save the earning record
-            newEarning.save()
+            new_Earning.save()
                 .then(() => {
-                    res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning });
+                    res.status(200).json({ message: 'Game played and earning recorded successfully', new_Earning });
                 })
                 .catch((error) => {
                     res.status(500).json({ message: 'Error recording earning', error });
@@ -166,39 +166,39 @@ async function recordGameOutcome(req, res) {
         // If the user loses the game
         else {
             // Create a new earning record
-            let newReferralearning;
+            let new_Referral_learning;
             // Fetch the user details
             const user = await userModel.findById(userId);
 
             // Calculate the referral earnings
-            const ReferralCommisionAmount = calculateReferralEarnings(stakeAmount, 20, 10);
+            const Referral_Commission_Amount = calculateReferralEarnings(stakeAmount, 20, 10);
 
             // Check if the user has a referrer
             if (!!user.referredBy) {
            
                 // Create a new referral earning record
-                newReferralearning = new referralEarnings({
+                new_Referral_learning = new referralEarnings({
                     referrer_id: user.referredBy,
                     referred_id: userId,
-                    earning_type: 'Game Played',
-                    points_earned: ReferralCommisionAmount
+                    earning_type: 'Game_Played',
+                    points_earned: Referral_Commission_Amount
                 });
 
                 // Save the referral earning record
-                await newReferralearning.save()
+                await new_Referral_learning.save()
              
             }
 
             // Create a new earning record
-            const newEarning = new Earnings({
+            const new_Earning = new Earnings({
                 user_id: userId,
-                earning_type: 'Game Played',
+                earning_type: 'Game_Played',
                 points_earned: -stakeAmount
             });
 
             // Save the earning record
-            await newEarning.save()
-            res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning, newReferralearning });
+            await new_Earning.save()
+            res.status(200).json({ message: 'Game played and earning recorded successfully', new_Earning, new_Referral_learning });
         }
     }
     catch (error) {

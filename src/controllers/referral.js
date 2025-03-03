@@ -18,12 +18,12 @@ const ReferralEarnings = require('../models/referralEarnings');
 const GenerateReferralCode = async (req, res) => {
     try {
         // Extract the user from the request object
-        const user = req.user.user;
+        const user = req.user;
 
         // Check if the user already has a referral code
         const existingUserWithReferralCode = await User.findOne({ _id: user._id, referralCode: { $exists: true } });
         if (existingUserWithReferralCode) {
-            return res.status(200).json({ message: "User already has a referral code", referralCode: existingUserWithReferralCode.referralCode });
+            return res.status(200).json({ message: "User already has a referral code", referral_Code: existingUserWithReferralCode.referralCode });
         }
 
         // Generate a unique referral code
@@ -32,7 +32,7 @@ const GenerateReferralCode = async (req, res) => {
         // Update the user with the referral code
         const updatedUser = await User.findByIdAndUpdate(
             { _id: `${user._id}` },
-            { $set: { referralCode: ReferralCode } },
+            { $set: { referral_Code: ReferralCode } },
             { upsert: true }
         );
 
@@ -42,7 +42,7 @@ const GenerateReferralCode = async (req, res) => {
         }
 
         // Return the referral code
-        return res.status(200).json({ referralCode: ReferralCode });
+        return res.status(200).json({ referral_Code: ReferralCode });
 
     } catch (error) {
 
@@ -58,7 +58,7 @@ const GenerateReferralCode = async (req, res) => {
  * @function validateReferralCode
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
- * @param {string} req.params.referralCode - The referral code to validate.
+ * @param {string} req.params.referral_Code - The referral code to validate.
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - A promise that resolves to void.
  * @throws {Error} - Throws an error if there is a server issue.
@@ -67,17 +67,17 @@ const GenerateReferralCode = async (req, res) => {
 
 async function validateReferralCode(req, res) {
     // Extract the referral code from the request parameters
-    const referralCode = req.params.referralCode;
+    const referral_Code = req.params.referral_Code;
 
     try {
         // Check if the referral code exists in the database
-        const user = await User.findOne({ referralCode: referralCode });
+        const user = await User.findOne({ referral_Code: referral_Code });
         if (!user) {
             return res.status(404).json({ message: "Invalid referral code" });
         }
 
         // Return the referral code
-        return res.status(200).json({ message: "Valid referral code", referralCode: referralCode });
+        return res.status(200).json({ message: "Valid referral code", referral_Code: referral_Code });
    
     } catch (error) {
 
@@ -91,7 +91,7 @@ async function validateReferralCode(req, res) {
  * Retrieves the referral history for a specific user.
  *
  * @async
- * @function getReferralHistroy
+ * @function getReferralHistory
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user.
@@ -102,9 +102,9 @@ async function validateReferralCode(req, res) {
  * @returns {Promise<void>} - Returns a promise that resolves to void.
  * @throws {Error} - Throws an error if there is a server issue.
  */
-async function getReferralHistroy(req, res) {
+async function getReferralHistory(req, res) {
     // Extract the user ID from the request parameters
-    const userId = req.params.userId;
+    const user_Id = req.params.userId;
 
     // Extract the filter and days from the query parameters
     const filter = req.query.filter;
@@ -112,7 +112,7 @@ async function getReferralHistroy(req, res) {
 
     try {
         // Query the database for the referral history
-        let query = { referrer_id: userId };
+        let query = { referrer_id: user_Id };
  
         // Check if there is a filter
         if (filter) {
@@ -121,21 +121,21 @@ async function getReferralHistroy(req, res) {
 
         // Check if there is a days filter
         if (days) {
-            const daysAgo = new Date();
-            daysAgo.setDate(daysAgo.getDate() - parseInt(days));
-            query.created_at = { $gte: daysAgo };
+            const days_Ago = new Date();
+            days_Ago.setDate(days_Ago.getDate() - parseInt(days));
+            query.created_at = { $gte: days_Ago };
         }
 
         // Retrieve the referral history
-        const referralHistory = await ReferralEarnings.find(query);
+        const referral_History = await ReferralEarnings.find(query);
 
         // Check if there is referral history
-        if (!referralHistory.length) {
+        if (!referral_History.length) {
             return res.status(404).json({ message: "No referral history found for this user" });
         }
 
         // Return the referral history
-        return res.status(200).json({ referralHistory: referralHistory });
+        return res.status(200).json({ referral_History: referral_History });
 
     } catch (error) {
         return res.status(500).json({ message: "Server error" });
@@ -157,16 +157,16 @@ async function getReferralHistroy(req, res) {
 
 // Generate a unique referral code
 async function UniqueReferralCodeGenerator() {
-    let referralCode;
+    let referral_Code;
     let isUnique = false;
     while (!isUnique) {
-        referralCode = crypto.randomBytes(3).toString('hex');
-        const existingUser = await User.findOne({ referralCode: referralCode });
+        referral_Code = crypto.randomBytes(3).toString('hex');
+        const existingUser = await User.findOne({ referralCode: referral_Code });
         if (!existingUser) {
             isUnique = true;
         }
     }
-    return referralCode;
+    return referral_Code;
 
 }
 
@@ -197,36 +197,36 @@ async function getYourReferrals(req, res) {
         }
 
         // Calculate the total points earned from the referrals
-        let totalPoints = 0;
-        const referralDetails = [];
+        let total_Points = 0;
+        const referral_Details = [];
         // Loop through the referrals and calculate the total points earned
         for (const referral of referrals) {
 
             // Query the database for the earnings of the referral
-            const referralEarnings = await ReferralEarnings.find({ referrer_id: userId, referred_id: referral.referred_id._id });
-            let userTotalPoints = 0;
+            const referral_Earnings = await ReferralEarnings.find({ referrer_id: userId, referred_id: referral.referred_id._id });
+            let user_Total_Points = 0;
 
             // Calculate the total points earned by the user
-            referralEarnings.forEach(earning => {
-                totalPoints += earning.points_earned;
-                userTotalPoints += earning.points_earned;
+            referral_Earnings.forEach(earning => {
+                total_Points += earning.points_earned;
+                user_Total_Points += earning.points_earned;
             });
 
             // Add the referral details to the response
-            referralDetails.push({
+            referral_Details.push({
                 referredUser: referral.referred_id.email,
                 referralDate: referral.created_at,
-                pointsEarned: userTotalPoints
+                pointsEarned: user_Total_Points
             });
         }
 
         // Sort the referral details by points earned
-        referralDetails.sort((a, b) => b.pointsEarned - a.pointsEarned);
+        referral_Details.sort((a, b) => b.pointsEarned - a.pointsEarned);
 
         // Return the referral details and total points earned
         return res.status(200).json({
-            referrals: referralDetails,
-            totalPoints: totalPoints
+            referrals: referral_Details,
+            total_Points: total_Points
         });
 
     } catch (error) {
@@ -257,39 +257,39 @@ async function getTopReferrals(req, res) {
         }
       
         //  Create an object to store the top referrers and their details
-        const topReferrerDeatils = {};
+        const top_Referrer_Details = {};
 
         // Loop through the referrals and calculate the total points earned by the referrer
         for (const referral of referrals) {
-            const referrerEarnings = await ReferralEarnings.find({ referrer_id: referral.referrer_id });
+            const referrer_Earnings = await ReferralEarnings.find({ referrer_id: referral.referrer_id });
             // Calculate the total points earned by the referrer
-            let totalPoints = 0;
-            referrerEarnings.forEach(earning => {
-                totalPoints += earning.points_earned;
+            let total_Points = 0;
+            referrer_Earnings.forEach(earning => {
+                total_Points += earning.points_earned;
             });
 
             // Add the referrer details to the response
-            if (!topReferrerDeatils[referral.referrer_id]) {
-                topReferrerDeatils[referral.referrer_id] = {
+            if (!top_Referrer_Details[referral.referrer_id]) {
+                top_Referrer_Details[referral.referrer_id] = {
                     referrerId: referral.referrer_id,
-                    totalPoints: 0,
+                    total_Points: 0,
                     referrals: []
                 };
             }
 
             // Update the total points earned by the referrer
-            topReferrerDeatils[referral.referrer_id].totalPoints += totalPoints;
-            topReferrerDeatils[referral.referrer_id].referrals.push({
+            top_Referrer_Details[referral.referrer_id].total_Points += total_Points;
+            top_Referrer_Details[referral.referrer_id].referrals.push({
                 referredUser: referral.referred_id,
-                pointsEarned: totalPoints
+                pointsEarned: total_Points
             });
         }
 
         // Sort the top referrers by total points earned
-        const sortedReferrals = Object.values(topReferrerDeatils).sort((a, b) => b.totalPoints - a.totalPoints);
+        const sorted_Referrals = Object.values(top_Referrer_Details).sort((a, b) => b.total_Points - a.total_Points);
 
         // Return the top referrers
-        return res.status(200).json({ topReferrals: sortedReferrals });
+        return res.status(200).json({ topReferrals: sorted_Referrals });
 
     } catch (error) {
         return res.status(500).json({ message: "Server error" });
@@ -299,4 +299,4 @@ async function getTopReferrals(req, res) {
 
 
 
-module.exports = { GenerateReferralCode, getTopReferrals, getYourReferrals, validateReferralCode, getReferralHistroy };
+module.exports = { GenerateReferralCode, getTopReferrals, getYourReferrals, validateReferralCode, getReferralHistory };

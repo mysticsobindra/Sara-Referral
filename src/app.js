@@ -16,7 +16,7 @@ const port = 3000;
 
 connectDb(process.env.MONGODB_URI);
 
-const swaggerOptions = {
+const swagger_Options = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
@@ -31,22 +31,21 @@ const swaggerOptions = {
     apis: ['./src/routes/*.js'],
 };
 
-const corsOptions = {
-    origin: 'http://localhost:',
+const cors_Options = {
+    origin: 'http://localhost:5173',
     optionsSuccessStatus: 200,
-    withCredentials: true,
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 };
 
-
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use(cors(corsOptions));
-app.use(cors());
+const swagger_Spec = swaggerJsdoc(swagger_Options);
+app.use(cors(cors_Options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swagger_Spec));
 app.use('/', LoginSignup);
 app.use('/referral', authenticateToken, referralRoutes);
 app.use('/cms', authenticateToken, cmsRoutes);

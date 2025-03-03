@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router()
-const { GenerateReferralCode, validateReferralCode, getTopReferrals, getYourReferrals, getReferralHistroy } = require("../controllers/referral");
+const { GenerateReferralCode, validateReferralCode, getTopReferrals, getYourReferrals, getReferralHistory } = require("../controllers/referral");
 
 router.post("/generate", GenerateReferralCode);
 router.get("/validate/:referralCode", validateReferralCode);
-router.get("/histroy/:userId", getReferralHistroy);
+router.get("/history/:userId", getReferralHistory);
 router.get("/yourReferrals/:userId", getYourReferrals);
 router.get("/topReferrals", getTopReferrals);
 
@@ -122,7 +122,7 @@ module.exports = router;
  *                       format: date-time
  *                     __v:
  *                       type: number
- *                 referrel:
+ *                 referral:
  *                   type: object
  *                   properties:
  *                     referrer_id:
@@ -149,7 +149,7 @@ module.exports = router;
  *                   _id: "67b820c580a5345e68f81131"
  *                   createdAt: "2025-02-21T06:44:21.351Z"
  *                   __v: 0
- *                 referrel:
+ *                 referral:
  *                   referrer_id: "67b81477bdf5810b8023f16b"
  *                   referred_id: "67b820c580a5345e68f81131"
  *                   signup_bonus: 100
@@ -163,7 +163,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /referral/histroy/{userId}:
+ * /referral/history/{userId}:
  *   get:
  *     summary: Get referral history of a user
  *     tags: [Referral]
