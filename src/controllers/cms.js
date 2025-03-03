@@ -9,7 +9,7 @@ const Earnings = require("../models/earnings");
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user.
  * @param {Object} req.body - The request body.
- * @param {number} req.body.Balance - The balance to be added as points.
+ * @param {number} req.body.Balance - The balance to be credit as points .
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - A promise that resolves when the operation is complete.
  * @throws {Error} - Throws an error if there is a server error.

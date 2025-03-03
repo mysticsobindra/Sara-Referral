@@ -4,7 +4,7 @@ const referralEarnings = require('../models/referralEarnings');
 const { calculateReferralEarnings } = require('../utils/functions');
 
 /**
- * Updates the user's balance based on their earnings and referral earnings.
+ * Updates the user's balance based on their earnings and referral earnings , then return current Points of user .
  *
  * @async
  * @function TotalUserPoints

@@ -8,7 +8,7 @@ TotalUserPoints,
 const router = express.Router();
 
 router.post("/play/:userId", recordGamePlay);
-router.get("/points/:userId", TotalUserPoints);
+router.patch("/points/:userId", TotalUserPoints);
 router.get("/histroy/:userId", EarningsController);
 router.post("/gameDecision/:userId", recordGameOutcome);
 
@@ -76,8 +76,8 @@ module.exports = router;
 /**
  * @swagger
  * /game/balance/{userId}:
- *   get:
- *     summary: Get user current Total Points
+ *   patch:
+ *     summary: Updates user Total Points based on their earning and  and return current balance
  *     tags: [Game]
  *     parameters:
  *       - in: path
