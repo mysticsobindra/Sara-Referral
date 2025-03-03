@@ -15,7 +15,7 @@ const earningsSchema = new Schema({
     },
     earning_type: {
         type: String,
-        enum: ['New Referral', 'Game Played' ],
+        enum: ['New_Referral', 'Game_Played' ],
         required: true
     },
     points_earned: {

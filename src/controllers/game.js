@@ -58,18 +58,25 @@ const TotalUserPoints = async (req, res) => {
  * @returns {Object} The response object with status and message.
  */
 function recordGamePlay(req, res) {
+    // Extract the user ID and balance from the request
     const { userId } = req.params;
+
+    // Extract the user ID and balance from the request
     const { balance } = req.body;
 
+    // Check if the user ID and balance are provided
     if (!userId || balance === undefined) {
         return res.status(400).json({ message: 'userModel ID and balance are required' });
     }
+
+    // Create a new earning record
     const newEarning = new Earnings({
         user_id: userId,
         earning_type: 'Game Played',
         points_earned: -balance
     });
 
+    // Save the earning record
     newEarning.save()
         .then(() => {
             res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning });
@@ -91,15 +98,19 @@ function recordGamePlay(req, res) {
  * @returns {Promise<void>} Sends a JSON response with the user's earnings or an error message.
  */
 async function EarningsController(req, res) {
+    // Extract the user ID from the request parameters
     const { userId } = req.params;
 
+    // Check if the user ID is provided
     if (!userId) {
         return res.status(400).json({ message: 'User ID is required' });
     }
 
     try {
+        // Fetch the earnings for the user
         const earnings = await Earnings.find({ user_id: userId });
 
+        // Send the earnings as a response
         res.status(200).json({ earnings });
     }
     catch (error) {
@@ -124,21 +135,25 @@ async function EarningsController(req, res) {
  */
 async function recordGameOutcome(req, res) {
 
+    // Extract the user ID, decision, and stake amount from the request
     const { userId } = req.params;
     const { decision, stakeAmount } = req.body;
     try {
+        // Check if the user ID and decision are provided
         if (!userId || !decision) {
             return res.status(400).json({ message: 'User ID and decision are required' });
         }
 
+        // Check if the decision is 'win' or 'lose'
         if (decision == 'win') {
-      
+            // Create a new earning record
             const newEarning = new Earnings({
                 user_id: userId,
                 earning_type: 'Game Played',
                 points_earned: stakeAmount
             });
 
+            // Save the earning record
             newEarning.save()
                 .then(() => {
                     res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning });
@@ -146,14 +161,22 @@ async function recordGameOutcome(req, res) {
                 .catch((error) => {
                     res.status(500).json({ message: 'Error recording earning', error });
                 });
-        } else {
+        } 
+
+        // If the user loses the game
+        else {
+            // Create a new earning record
             let newReferralearning;
+            // Fetch the user details
             const user = await userModel.findById(userId);
 
+            // Calculate the referral earnings
             const ReferralCommisionAmount = calculateReferralEarnings(stakeAmount, 20, 10);
 
+            // Check if the user has a referrer
             if (!!user.referredBy) {
            
+                // Create a new referral earning record
                 newReferralearning = new referralEarnings({
                     referrer_id: user.referredBy,
                     referred_id: userId,
@@ -161,16 +184,19 @@ async function recordGameOutcome(req, res) {
                     points_earned: ReferralCommisionAmount
                 });
 
+                // Save the referral earning record
                 await newReferralearning.save()
              
             }
 
+            // Create a new earning record
             const newEarning = new Earnings({
                 user_id: userId,
                 earning_type: 'Game Played',
                 points_earned: -stakeAmount
             });
 
+            // Save the earning record
             await newEarning.save()
             res.status(200).json({ message: 'Game played and earning recorded successfully', newEarning, newReferralearning });
         }

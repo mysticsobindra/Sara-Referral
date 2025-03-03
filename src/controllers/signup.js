@@ -23,21 +23,27 @@ const saltRounds = 10;
  */
 
 async function registerUser(req, res) {
+
+    // Extract the email and password from the request body
     const { email, password } = req.body;
     const referralCode = req.query.referralCode;
-
+    
+    // Check if the email and password are provided
     if (!email || !password) {
         return res.status(400).send('Email and password are required');
     }
 
     try {
+        // Check if the user already exists
         const existingUser = await userModel.findOne({ email: email });
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+        // Generate a unique referral code
         let newReferralCode;
         let isUnique = false;
         while (!isUnique) {
@@ -48,6 +54,7 @@ async function registerUser(req, res) {
             }
         }
 
+        // Check if the referral code is valid
         let referringUser;
         if (referralCode) {
             referringUser = await userModel.findOne({ referralCode: referralCode });
@@ -56,6 +63,7 @@ async function registerUser(req, res) {
             }
         }
 
+        // Create a new user
         const newUser = new userModel({
             email: email,
             password: hashedPassword,
@@ -65,19 +73,24 @@ async function registerUser(req, res) {
 
         await newUser.save();
 
+
+        // If the user was referred, signup with referral code and create a referral record
         if (referringUser) {
+            // Create a new referral record
             const newReferral = new Referral({
                 referrer_id: referringUser._id,
                 referred_id: newUser._id
             });
 
+            // Create a new referral earning record
             const referralEarning = new referralEarnings({
                 referrer_id: referringUser._id,
                 referred_id: newUser._id,
                 earning_type: 'New Referral',
                 points_earned: 100
             });
-
+     
+            // Save the referral and referral earning records
             await newReferral.save();
             await referralEarning.save();
         }

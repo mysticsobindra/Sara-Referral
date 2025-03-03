@@ -10,7 +10,7 @@ const earningsSchema = new Schema({
     },
     earning_type: {
         type: String,
-        enum: ['Deposit', 'Game Played' ],
+        enum: ['Deposit', 'Game_Played' ],
         required: true
     },
     points_earned: {
