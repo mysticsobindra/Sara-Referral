@@ -40,11 +40,6 @@ To set up the Sara-ServerSide project, ensure you have the following installed o
     npm start
     ```
 
-    Alternatively, you can use nodemon to automatically restart the server on file changes:
-    ```sh
-    nodemon start
-    ```
-
 6. **Access the server:**
     The server will be running at `http://localhost:8000` by default.
 
