@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { registerUser } = require("../controllers/signup");
+const { register_User } = require("../controllers/signup");
 const { Login } = require("../controllers/login");
-const { refreshToken } = require("../controllers/refreshToken");
+const { refresh_Token } = require("../controllers/refreshToken");
 
-router.post("/register", registerUser);
+router.post("/register", register_User);
 router.post("/login", Login);
-router.post("/refresh-token", refreshToken);
+router.post("/refresh-token", refresh_Token);
 
 module.exports = router;
 
@@ -29,7 +29,7 @@ module.exports = router;
  *                 type: string
  *     parameters:
  *       - in: query
- *         name: referralCode
+ *         name: referral_code
  *         schema:
  *           type: string
  *         required: false
@@ -54,10 +54,10 @@ module.exports = router;
  *                     password:
  *                       type: string
  *                       example: $2b$10$2ZExr6njHlKpIbwA.8WvvegNrdHKTtt/5QRcdTqmJi1hogcKSTN3i
- *                     referralCode:
+ *                     referral_code:
  *                       type: string
  *                       example: 338cc6
- *                     referredBy:
+ *                     referred_By:
  *                       type: string
  *                       example: 67b84da07e39006ca19a81b2
  *                     Balance:
@@ -66,7 +66,7 @@ module.exports = router;
  *                     _id:
  *                       type: string
  *                       example: 67c3f66972b075a6b634a130
- *                     createdAt:
+ *                     created_At:
  *                       type: string
  *                       example: 2025-03-02T06:10:49.583Z
  *                     __v:
@@ -114,7 +114,7 @@ module.exports = router;
  *     tags: [Auth]
  *     parameters:
  *       - in: cookie
- *         name: refreshToken
+ *         name: refresh_Token
  *         schema:
  *           type: string
  *         required: true

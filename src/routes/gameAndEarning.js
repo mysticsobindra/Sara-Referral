@@ -1,16 +1,16 @@
 const express = require("express");
 const {
-TotalUserPoints,
-  recordGamePlay,
-  EarningsController,
-  recordGameOutcome,
+  Total_User_Points,
+  record_Game_Play,
+  Earnings_Controller,
+  record_Game_Outcome,
 } = require("../controllers/game");
 const router = express.Router();
 
-router.post("/play/:userId", recordGamePlay);
-router.patch("/points/:userId", TotalUserPoints);
-router.get("/history/:userId", EarningsController);
-router.post("/gameDecision/:userId", recordGameOutcome);
+router.post("/play/:userId", record_Game_Play);
+router.patch("/points/:userId", Total_User_Points);
+router.get("/history/:userId", Earnings_Controller);
+router.post("/gameDecision/:userId", record_Game_Outcome);
 
 module.exports = router;
 

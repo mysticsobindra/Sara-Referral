@@ -7,7 +7,7 @@ const ReferralEarnings = require('../models/referralEarnings');
  * Generates a unique referral code for a user if they do not already have one.
  * 
  * @async
- * @function GenerateReferralCode
+ * @function Generate_Referral_Code
  * @param {Object} req - The request object.
  * @param {Object} req.user - The user object attached to the request.
  * @param {Object} req.user.user - The user details.
@@ -15,19 +15,19 @@ const ReferralEarnings = require('../models/referralEarnings');
  * @returns {Promise<void>} - Returns a JSON response with the referral code or an error message.
  * @throws {Error} - Throws an error if there is a server issue.
  */
-const GenerateReferralCode = async (req, res) => {
+const Generate_Referral_Code = async (req, res) => {
     try {
         // Extract the user from the request object
         const user = req.user;
 
         // Check if the user already has a referral code
-        const existingUserWithReferralCode = await User.findOne({ _id: user._id, referralCode: { $exists: true } });
+        const existingUserWithReferralCode = await User.findOne({ _id: user._id, referral_code: { $exists: true } });
         if (existingUserWithReferralCode) {
-            return res.status(200).json({ message: "User already has a referral code", referral_Code: existingUserWithReferralCode.referralCode });
+            return res.status(200).json({ message: "User already has a referral code", referral_Code: existingUserWithReferralCode.referral_code });
         }
 
         // Generate a unique referral code
-        let ReferralCode = await UniqueReferralCodeGenerator();
+        let ReferralCode = await Unique_Referral_Code_Generator();
 
         // Update the user with the referral code
         const updatedUser = await User.findByIdAndUpdate(
@@ -55,7 +55,7 @@ const GenerateReferralCode = async (req, res) => {
  * Validates a referral code provided in the request parameters.
  *
  * @async
- * @function validateReferralCode
+ * @function validate_Referral_Code
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.referral_Code - The referral code to validate.
@@ -65,7 +65,7 @@ const GenerateReferralCode = async (req, res) => {
  */
 
 
-async function validateReferralCode(req, res) {
+async function validate_Referral_Code(req, res) {
     // Extract the referral code from the request parameters
     const referral_Code = req.params.referral_Code;
 
@@ -91,7 +91,7 @@ async function validateReferralCode(req, res) {
  * Retrieves the referral history for a specific user.
  *
  * @async
- * @function getReferralHistory
+ * @function get_Referral_History
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user.
@@ -102,7 +102,7 @@ async function validateReferralCode(req, res) {
  * @returns {Promise<void>} - Returns a promise that resolves to void.
  * @throws {Error} - Throws an error if there is a server issue.
  */
-async function getReferralHistory(req, res) {
+async function get_Referral_History(req, res) {
     // Extract the user ID from the request parameters
     const user_Id = req.params.userId;
 
@@ -151,17 +151,17 @@ async function getReferralHistory(req, res) {
  * code is found.
  *
  * @async
- * @function UniqueReferralCodeGenerator
+ * @function Unique_Referral_Code_Generator
  * @returns {Promise<string>} A promise that resolves to a unique referral code.
  */
 
 // Generate a unique referral code
-async function UniqueReferralCodeGenerator() {
+async function Unique_Referral_Code_Generator() {
     let referral_Code;
     let isUnique = false;
     while (!isUnique) {
         referral_Code = crypto.randomBytes(3).toString('hex');
-        const existingUser = await User.findOne({ referralCode: referral_Code });
+        const existingUser = await User.findOne({ referral_code: referral_Code });
         if (!existingUser) {
             isUnique = true;
         }
@@ -176,7 +176,7 @@ async function UniqueReferralCodeGenerator() {
  * Retrieves the referrals for a given user and calculates the total points earned from those referrals.
  *
  * @async
- * @function getYourReferrals
+ * @function get_Your_Referrals
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user whose referrals are to be retrieved.
@@ -184,7 +184,7 @@ async function UniqueReferralCodeGenerator() {
  * @returns {Promise<void>} - A promise that resolves to void.
  * @throws {Error} - Throws an error if there is a server error.
  */
-async function getYourReferrals(req, res) {
+async function get_Your_Referrals(req, res) {
 
     // Extract the user ID from the request parameters
     const userId = req.params.userId;
@@ -239,13 +239,13 @@ async function getYourReferrals(req, res) {
  * Retrieves the top referrals and their earnings.
  *
  * @async
- * @function getTopReferrals
+ * @function get_Top_Referrals
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - Returns a JSON response with the top referrals or an error message.
  * @throws {Error} - Throws an error if there is a server issue.
  */
-async function getTopReferrals(req, res) {
+async function get_Top_Referrals(req, res) {
 
     try {
         // Query the database for all referrals
@@ -299,4 +299,4 @@ async function getTopReferrals(req, res) {
 
 
 
-module.exports = { GenerateReferralCode, getTopReferrals, getYourReferrals, validateReferralCode, getReferralHistory };
+module.exports = { Generate_Referral_Code, get_Top_Referrals, get_Your_Referrals, validate_Referral_Code, get_Referral_History };

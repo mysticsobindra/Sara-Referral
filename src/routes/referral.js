@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router()
-const { GenerateReferralCode, validateReferralCode, getTopReferrals, getYourReferrals, getReferralHistory } = require("../controllers/referral");
+const {  Generate_Referral_Code, get_Top_Referrals, get_Your_Referrals, validate_Referral_Code, get_Referral_History  } = require("../controllers/referral");
 
-router.post("/generate", GenerateReferralCode);
-router.get("/validate/:referralCode", validateReferralCode);
-router.get("/history/:userId", getReferralHistory);
-router.get("/yourReferrals/:userId", getYourReferrals);
-router.get("/topReferrals", getTopReferrals);
+router.post("/generate", Generate_Referral_Code);
+router.get("/validate/:referralCode", validate_Referral_Code);
+router.get("/history/:userId", get_Referral_History);
+router.get("/yourReferrals/:userId", get_Your_Referrals);
+router.get("/topReferrals", get_Top_Referrals);
 
 
 module.exports = router;
@@ -27,11 +27,11 @@ module.exports = router;
  *               properties:
  *                 message:
  *                   type: string
- *                 referralCode:
+ *                 referral_code:
  *                   type: string
  *             example:
  *               message: "User already has a referral code"
- *               referralCode: "4acaa5"
+ *               referral_code: "4acaa5"
  *       400:
  *         description: Bad request
  */
@@ -44,7 +44,7 @@ module.exports = router;
  *     tags: [Referral]
  *     parameters:
  *       - in: path
- *         name: referralCode
+ *         name: referral_code
  *         schema:
  *           type: string
  *         required: true
@@ -59,11 +59,11 @@ module.exports = router;
  *               properties:
  *                 message:
  *                   type: string
- *                 referralCode:
+ *                 referral_code:
  *                   type: string
  *               example:
  *                 message: "Valid referral code"
- *                 referralCode: "4acaa5"
+ *                 referral_code: "4acaa5"
  *       400:
  *         description: Bad request
  */

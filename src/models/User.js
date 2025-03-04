@@ -11,10 +11,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    referralCode: {
+    referral_code: {
         type: String,
     },
-    referredBy: {
+    referred_By: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         default: null
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    createdAt: {
+    created_At: {
         type: Date,
         default: Date.now
     }

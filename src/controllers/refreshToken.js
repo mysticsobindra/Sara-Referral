@@ -7,7 +7,7 @@ const { verifyToken, generateToken } = require("../services/Token");
  * Refreshes the access token using the provided refresh token.
  *
  * @async
- * @function refreshToken
+ * @function refresh_Token
  * @param {Object} req - The request object.
  * @param {Object} req.headers - The headers of the request.
  * @param {string} req.headers.cookie - The cookies from the request headers.
@@ -22,7 +22,7 @@ const { verifyToken, generateToken } = require("../services/Token");
  * and generates new access and refresh tokens. The new tokens are then set as cookies in the response.
  */
 
-async function refreshToken(req, res) {
+async function refresh_Token(req, res) {
   // Extract the refresh token from the request
   const old_Refresh_Token = req.headers.cookie.split(";")[1].split("=")[1];
 
@@ -33,7 +33,7 @@ async function refreshToken(req, res) {
 
   // Check if the refresh token is valid
   const existing_Token = await RefreshToken.findOne({
-    refreshToken: old_Refresh_Token,
+    refresh_Token: old_Refresh_Token,
   }).populate("userId");
 
   // Check if the refresh token is valid
@@ -72,8 +72,8 @@ async function refreshToken(req, res) {
  
       // Update the refresh token in the database
       await RefreshToken.findOneAndUpdate(
-        { refreshToken: old_Refresh_Token },
-        { refreshToken: new_Refresh_Token }
+        { refresh_Token: old_Refresh_Token },
+        { refresh_Token: new_Refresh_Token }
       );
 
       // Set the new access and refresh tokens as cookies
@@ -91,4 +91,4 @@ async function refreshToken(req, res) {
   );
 }
 
-module.exports = { refreshToken };
+module.exports = { refresh_Token };

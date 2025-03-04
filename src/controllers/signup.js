@@ -10,7 +10,7 @@ const saltRounds = 10;
  * Registers a new user.
  *
  * @async
- * @function registerUser
+ * @function register_User
  * @param {Object} req - The request object.
  * @param {Object} req.body - The body of the request.
  * @param {string} req.body.email - The email of the user.
@@ -22,7 +22,7 @@ const saltRounds = 10;
  * @throws {Error} If there is an error during user registration.
  */
 
-async function registerUser(req, res) {
+async function register_User(req, res) {
   // Extract the email and password from the request body
   const { email, password } = req.body;
   const referral_Code = req.query.referralCode;
@@ -48,7 +48,7 @@ async function registerUser(req, res) {
     while (!isUnique) {
       new_Referral_Code = crypto.randomBytes(3).toString("hex");
       const existing_User = await userModel.findOne({
-        referralCode: new_Referral_Code,
+        referral_code: new_Referral_Code,
       });
       if (!existing_User) {
         isUnique = true;
@@ -58,7 +58,7 @@ async function registerUser(req, res) {
     // Check if the referral code is valid
     let referring_User;
     if (referral_Code) {
-      referring_User = await userModel.findOne({ referralCode: referral_Code });
+      referring_User = await userModel.findOne({ referral_code: referral_Code });
       if (!referring_User) {
         return res.status(404).json({ message: "Invalid referral code" });
       }
@@ -68,8 +68,8 @@ async function registerUser(req, res) {
     const newUser = new userModel({
       email: email,
       password: hashed_Password,
-      referralCode: new_Referral_Code,
-      referredBy: referring_User ? referring_User._id : null,
+      referral_code: new_Referral_Code,
+      referred_By: referring_User ? referring_User._id : null,
     });
 
     await newUser.save();
@@ -103,4 +103,4 @@ async function registerUser(req, res) {
   }
 }
 
-module.exports = { registerUser };
+module.exports = { register_User };

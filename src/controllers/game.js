@@ -7,7 +7,7 @@ const { calculateReferralEarnings } = require('../utils/functions');
  * Updates the user's balance based on their earnings and referral earnings , then return current Points of user .
  *
  * @async
- * @function TotalUserPoints
+ * @function Total_User_Points
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user.
@@ -15,7 +15,7 @@ const { calculateReferralEarnings } = require('../utils/functions');
  * @returns {Promise<void>} - A promise that resolves when the user's balance is updated.
  * @throws {Error} - Throws an error if there is a server error.
  */
-const TotalUserPoints = async (req, res) => {
+const Total_User_Points = async (req, res) => {
     try {
         const { userId } = req.params;
 
@@ -48,7 +48,7 @@ const TotalUserPoints = async (req, res) => {
 
 /**
  * Handles the game play request, records the earning, and responds with the result.
- * @function recordGamePlay
+ * @function record_Game_Play
  * @param {Object} req - The request object.
  * @param {Object} req.params - The request parameters.
  * @param {string} req.params.userId - The ID of the user playing the game.
@@ -57,7 +57,7 @@ const TotalUserPoints = async (req, res) => {
  * @param {Object} res - The response object.
  * @returns {Object} The response object with status and message.
  */
-function recordGamePlay(req, res) {
+function record_Game_Play(req, res) {
     // Extract the user ID and balance from the request
     const { userId } = req.params;
 
@@ -90,14 +90,14 @@ function recordGamePlay(req, res) {
  * Controller to handle fetching earnings for a specific user.
  *
  * @async
- * @function EarningsController
+ * @function Earnings_Controller
  * @param {Object} req - Express request object.
  * @param {Object} req.params - Request parameters.
  * @param {string} req.params.userId - ID of the user whose earnings are to be fetched.
  * @param {Object} res - Express response object.
  * @returns {Promise<void>} Sends a JSON response with the user's earnings or an error message.
  */
-async function EarningsController(req, res) {
+async function Earnings_Controller(req, res) {
     // Extract the user ID from the request parameters
     const { userId } = req.params;
 
@@ -122,7 +122,7 @@ async function EarningsController(req, res) {
  * Controller for handling game decisions and recording earnings.
  * 
  * @async
- * @function recordGameOutcome
+ * @function record_Game_Outcome
  * @param {Object} req - Express request object.
  * @param {Object} req.params - Request parameters.
  * @param {string} req.params.userId - ID of the user making the decision.
@@ -133,7 +133,7 @@ async function EarningsController(req, res) {
  * @returns {Promise<void>} - Returns a promise that resolves to void.
  * @throws {Error} - Throws an error if there is a server error.
  */
-async function recordGameOutcome(req, res) {
+async function record_Game_Outcome(req, res) {
 
     // Extract the user ID, decision, and stake amount from the request
     const { userId } = req.params;
@@ -174,11 +174,11 @@ async function recordGameOutcome(req, res) {
             const Referral_Commission_Amount = calculateReferralEarnings(stakeAmount, 20, 10);
 
             // Check if the user has a referrer
-            if (!!user.referredBy) {
+            if (!!user.referred_By) {
            
                 // Create a new referral earning record
                 new_Referral_learning = new referralEarnings({
-                    referrer_id: user.referredBy,
+                    referrer_id: user.referred_By,
                     referred_id: userId,
                     earning_type: 'Game_Played',
                     points_earned: Referral_Commission_Amount
@@ -207,7 +207,7 @@ async function recordGameOutcome(req, res) {
     }
 }
 
-module.exports = { TotalUserPoints,
-    recordGamePlay,
-    EarningsController,
-    recordGameOutcome, };
+module.exports = { Total_User_Points,
+    record_Game_Play,
+    Earnings_Controller,
+    record_Game_Outcome, };

@@ -40,7 +40,7 @@ async function Login(req, res) {
         const REFRESH_TOKEN=  generateToken({...user}, process.env.REFRESH_TOKEN_SECRET,'7d')
 
         // Save the refresh token in the database
-        await RefreshToken.create({ refreshToken: REFRESH_TOKEN, userId: user._id });
+        await RefreshToken.create({ refresh_Token: REFRESH_TOKEN, userId: user._id });
 
         // Set the access and refresh token as cookies
         res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, { httpOnly: true, maxAge: 60 * 60 * 1000 });

@@ -1,8 +1,8 @@
 const express = require("express");
-const { updateTotalPoints } = require("../controllers/cms");
+const { update_Total_Points } = require("../controllers/cms");
 const router = express.Router()
 
-router.post("/balance/:userId",updateTotalPoints );
+router.post("/balance/:userId",update_Total_Points );
 
 module.exports = router;
 
