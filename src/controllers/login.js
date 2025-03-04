@@ -36,7 +36,7 @@ async function Login(req, res) {
         }
 
         // Generate a access and refresh token
-        const ACCESS_TOKEN=  generateToken({...user}, process.env.ACCESS_TOKEN_SECRET,"1min")
+        const ACCESS_TOKEN=  generateToken({...user}, process.env.ACCESS_TOKEN_SECRET,"15min")
         const REFRESH_TOKEN=  generateToken({...user}, process.env.REFRESH_TOKEN_SECRET,'7d')
 
         // Save the refresh token in the database

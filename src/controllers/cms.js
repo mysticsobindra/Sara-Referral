@@ -27,19 +27,13 @@ const updateTotalPoints = async (req, res) => {
     });
 
     // Save the new earning
-    new_Earning
-      .save()
-      .then(() => {
-        res.status(200).json({ message: "Deposit successfully", new_Earning });
-      })
-      .catch((error) => {
-        res.status(500).json({ message: "Error recording Deposit", error });
-      });
+    await new_Earning.save();
 
-    // Send a response
-    res
+    // Return a success response to the client
+    return res
       .status(200)
-      .json({ message: "Total points updated successfully", new_Earning });
+      .json({ message: "Deposit successfully", new_Earning });
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

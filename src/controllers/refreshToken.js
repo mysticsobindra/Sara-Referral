@@ -61,7 +61,7 @@ async function refreshToken(req, res) {
       const new_Access_Token = await generateToken(
         { ...clean_User_Data },
         process.env.ACCESS_TOKEN_SECRET,
-        "1min"
+        "15min"
       );
       // Generate a new refresh token
       const new_Refresh_Token = await generateToken(
@@ -69,7 +69,7 @@ async function refreshToken(req, res) {
         process.env.REFRESH_TOKEN_SECRET,
         "7d"
       );
-
+ 
       // Update the refresh token in the database
       await RefreshToken.findOneAndUpdate(
         { refreshToken: old_Refresh_Token },

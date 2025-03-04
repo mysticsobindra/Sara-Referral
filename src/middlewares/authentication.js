@@ -15,6 +15,7 @@ const { verifyToken } = require("../services/Token");
  */
 
 const authenticateToken = (req, res, next) => {
+
   if (!req.headers.cookie) {
     return res.status(401).json({ message: "cookie is missing" });
   }
@@ -37,6 +38,7 @@ const authenticateToken = (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: "failed to verify token" });
   }
+  
 };
 
 module.exports = { authenticateToken };
