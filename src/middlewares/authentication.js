@@ -1,6 +1,19 @@
 const jwt = require("jsonwebtoken");
 const { verifyToken } = require("../services/Token");
 
+/**
+ * Middleware to authenticate the access token from the request cookies.
+ * 
+ * @function
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ * @returns {Object} - Returns a response with status 401 if the cookie or access token is missing,
+ *                     status 403 if the token is expired or invalid, 
+ *                     status 400 if token verification fails,
+ *                     or calls the next middleware function if the token is valid.
+ */
+
 const authenticateToken = (req, res, next) => {
   if (!req.headers.cookie) {
     return res.status(401).json({ message: "cookie is missing" });

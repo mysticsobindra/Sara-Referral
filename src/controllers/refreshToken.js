@@ -1,5 +1,26 @@
+
 const RefreshToken = require("../models/refreshToken");
 const { verifyToken, generateToken } = require("../services/Token");
+
+
+/**
+ * Refreshes the access token using the provided refresh token.
+ *
+ * @async
+ * @function refreshToken
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The headers of the request.
+ * @param {string} req.headers.cookie - The cookies from the request headers.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - Returns a promise that resolves to void.
+ *
+ * @throws {Error} If no refresh token is provided.
+ * @throws {Error} If the refresh token is invalid.
+ *
+ * @description
+ * This function extracts the refresh token from the request cookies, verifies its validity,
+ * and generates new access and refresh tokens. The new tokens are then set as cookies in the response.
+ */
 
 async function refreshToken(req, res) {
   // Extract the refresh token from the request

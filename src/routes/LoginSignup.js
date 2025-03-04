@@ -12,9 +12,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /register:
+ * /refresh-token:
  *   post:
- *     summary: Register a new user
+ *     summary: Refresh
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -80,6 +80,8 @@ module.exports = router;
  *         description: Server error
  */
 
+
+
 /**
  * @swagger
  * /login:
@@ -104,4 +106,43 @@ module.exports = router;
  *         description: User logged in successfully
  *       401:
  *         description: Unauthorized
+ */
+
+
+
+/**
+ * @swagger
+ * /refresh-token:
+ *   post:
+ *     summary: Refresh access and refresh token, then update it in cookies and database
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: Refresh token of the user
+ *     responses:
+ *       200:
+ *         description: Access token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Access token refreshed successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Invalid refresh token
+ *       500:
+ *         description: Server error
  */
