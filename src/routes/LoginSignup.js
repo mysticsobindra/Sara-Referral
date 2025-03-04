@@ -80,34 +80,31 @@ module.exports = router;
  *         description: Server error
  */
 
-
 /**
  * @swagger
  * /login:
- *   get:
+ *   post:
  *     summary: Login a user
  *     tags: [Auth]
- *     parameters:
- *       - in: query
- *         name: username
- *         schema:
- *           type: string
- *         required: true
- *         description: Username of the user
- *       - in: query
- *         name: password
- *         schema:
- *           type: string
- *         required: true
- *         description: Password of the user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Username of the user
+ *               password:
+ *                 type: string
+ *                 description: Password of the user
  *     responses:
  *       200:
  *         description: User logged in successfully
  *       401:
  *         description: Unauthorized
  */
-
-
 
 /**
  * @swagger
