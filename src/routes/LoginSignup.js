@@ -12,9 +12,9 @@ module.exports = router;
 
 /**
  * @swagger
- * /refresh-token:
+ * /register:
  *   post:
- *     summary: Refresh
+ *     summary: Register a new user
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -81,7 +81,6 @@ module.exports = router;
  */
 
 
-
 /**
  * @swagger
  * /login:
@@ -116,16 +115,13 @@ module.exports = router;
  *   post:
  *     summary: Refresh access and refresh token, then update it in cookies and database
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 description: Refresh token of the user
+ *     parameters:
+ *       - in: cookie
+ *         name: refreshToken
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Refresh token of the user
  *     responses:
  *       200:
  *         description: Access token refreshed successfully

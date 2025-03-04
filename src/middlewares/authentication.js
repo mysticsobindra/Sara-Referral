@@ -29,19 +29,7 @@ const authenticateToken = (req, res, next) => {
     const verified = verifyToken(Access_Token, process.env.ACCESS_TOKEN_SECRET);
 
     if (!verified) {
-      axios
-        .post("/refreshToken")
-        .then((response) => {
-
-          const newToken = response.data.token;
-          return res.status(200).json({ message: "Token refreshed" });
-
-        })
-        .catch((error) => {
-          return res
-            .status(403)
-            .json({ message: "Access Denied Due To Expired Or Invalid Token" });
-        });
+      return res.status(403).json({ message: "access token is invalid" });
     }
 
     req.user = verified._doc ? verified._doc : verified;
