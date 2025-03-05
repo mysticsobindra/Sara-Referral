@@ -74,7 +74,7 @@ module.exports = router;
  *         description: Bad request
  *       404:
  *        description: Referral code not found
- *        500:
+ *       500:
  *         description: Server error
  */
 
@@ -151,7 +151,7 @@ module.exports = router;
  *                     __v: 0
  *       400:
  *         description: Bad request
- *        500:
+ *       500:
  *         description: Server error
  */
 
@@ -198,7 +198,7 @@ module.exports = router;
  *                 totalPoints: 124
  *       400:
  *         description: Bad request
- *        500:
+ *       500:
  *         description: Server error
  */
 
