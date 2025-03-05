@@ -20,9 +20,9 @@ const { verify_token, generate_token } = require("../services/Token");
  * and generates new access and refresh tokens. The new tokens are then set as cookies in the response.
  */
 
-async function refresh_token(req, res) {
+const refresh_token = async (req, res) => {
   // Extract the refresh token from the request
-  const old_refresh_token = req.headers.cookie.split(";")[1].split("=")[1];
+  const old_refresh_token = req.cookies.refresh_token;
 
   // Check if the refresh token is provided
   if (!old_refresh_token) {
@@ -47,23 +47,23 @@ async function refresh_token(req, res) {
 
       // Generate a new access token
       const new_access_token = await generate_token(
-        { ...clean_User_Data },
+        { _id: clean_User_Data._id, created_at: clean_User_Data.created_at },
         process.env.ACCESS_TOKEN_SECRET,
         "15min"
       );
       // Generate a new refresh token
       const new_refresh_token = await generate_token(
-        { ...clean_User_Data },
+        { _id: clean_User_Data._id, created_at: clean_User_Data.created_at },
         process.env.REFRESH_TOKEN_SECRET,
         "7d"
       );
 
       // Set the new access and refresh tokens as cookies
-      res.cookie("ACCESS_TOKEN", new_access_token, {
+      res.cookie("access_token", new_access_token, {
         httpOnly: true,
         maxAge: 30 * 60 * 60 * 1000,
       });
-      res.cookie("REFRESH_TOKEN", new_refresh_token, {
+      res.cookie("refresh_token", new_refresh_token, {
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
@@ -71,6 +71,6 @@ async function refresh_token(req, res) {
       return res.json({ message: "Access token refreshed successfully" });
     }
   );
-}
+};
 
 module.exports = { refresh_token };

@@ -6,22 +6,22 @@ const { Schema } = mongoose;
 const earnings_schema = new Schema({
     referrer_id: {
         type: String,
-        required: true,
+        required: [true, 'Referrer ID is required'],
         ref: 'User'
     },
     referred_id: {
         type: String,
-        required: true,
+        required: [true, 'Referred ID is required'],
         ref: 'User'
     },
     earning_type: {
         type: String,
-        enum: ['New_Referral', 'game_played' ],
-        required: true
+        enum: ['New_Referral', 'game_played'],
+        required: [true, 'Earning type is required']
     },
     points_earned: {
         type: Number,
-        required: true
+        required: [true, 'Points earned is required']
     },
     created_at: {
         type: Date,

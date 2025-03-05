@@ -4,19 +4,19 @@ const mongoose = require("mongoose");
 const setting_schema = new mongoose.Schema({
   new_referral_points: {
     type: Number,
-    required: true,
+    required: [true, "New referral points is required"],
   },
   platform_earn_percentage: {
     type: Number,
-    required: true,
+    required: [true, "Platform earn percentage is required"],
   },
   referral_earn_percentage: {
     type: Number,
-    required: true,
+    required: [true, "Referral earn percentage is required"],
   },
   duration_filter_data: {
     type: [Number],
-    required: true,
+    required: [true, "Duration filter data is required"],
   },
 });
 

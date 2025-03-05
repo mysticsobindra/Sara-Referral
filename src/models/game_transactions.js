@@ -9,25 +9,24 @@ const game_schema = new mongoose.Schema({
     },
     user_id: {
         type: String,
-        required: true,
+        required: [true, 'User ID is required'],
         ref: 'User'
     },
     game_name: {
         type: String,
-        required: true,
-        maxlength: 50
+        required: [true, 'Game name is required'],
     },
     points_spent: {
         type: Number,
-        required: true
+        required: [true, 'Points spent is required']
     },
     platform_earnings: {
         type: Number,
-        required: true
+        required: [true, 'Platform earnings is required']
     },
     referrer_earnings: {
         type: Number,
-        required: true
+        required: [true, 'Referrer earnings is required']
     },
     created_at: {
         type: Date,

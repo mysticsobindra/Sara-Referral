@@ -7,17 +7,17 @@ const { Schema } = mongoose;
 const earningsSchema = new Schema({
     user_id: {
         type: String,
-        required: true,
+        required: [true, 'User ID is required'],
         ref: 'User'
     },
     earning_type: {
         type: String,
         enum: ['Deposit', 'game_played' ],
-        required: true
+        required: [true, 'Earning type is required']
     },
     points_earned: {
         type: Number,
-        required: true
+        required: [true, 'Points earned is required']
     },
     created_at: {
         type: Date,
