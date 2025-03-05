@@ -1,8 +1,9 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const earningsSchema = new Schema({
+const earnings_schema = new Schema({
     referrer_id: {
         type: String,
         required: true,
@@ -15,7 +16,7 @@ const earningsSchema = new Schema({
     },
     earning_type: {
         type: String,
-        enum: ['New_Referral', 'Game_Played' ],
+        enum: ['New_Referral', 'game_played' ],
         required: true
     },
     points_earned: {
@@ -28,6 +29,6 @@ const earningsSchema = new Schema({
     }
 });
 
-const referralEarnings = mongoose.model('referralEarnings', earningsSchema);
+const referralEarnings = mongoose.model('referralEarnings', earnings_schema);
 
 module.exports = referralEarnings;

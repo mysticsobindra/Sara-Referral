@@ -1,28 +1,32 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const express = require("express");
+
+// 🔹 Internal Module Imports (Project files)
 const {
-  Total_User_Points,
-  record_Game_Play,
-  Earnings_Controller,
-  record_Game_Outcome,
+  total_user_points,
+  record_game_play,
+  earnings_controller,
+  record_game_outcome,
 } = require("../controllers/game");
+
 const router = express.Router();
 
-router.post("/play/:userId", record_Game_Play);
-router.patch("/points/:userId", Total_User_Points);
-router.get("/history/:userId", Earnings_Controller);
-router.post("/gameDecision/:userId", record_Game_Outcome);
+router.post("/play/:user_id", record_game_play);
+router.patch("/points/:user_id", total_user_points);
+router.get("/history/:user_id", earnings_controller);
+router.post("/gameDecision/:user_id", record_game_outcome);
 
 module.exports = router;
 
 /**
  * @swagger
- * /game/play/{userId}:
+ * /game/play/{user_id}:
  *   post:
  *     summary: Handles the game play request, records the earning, and responds with the result.
  *     tags: [Game]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
@@ -75,13 +79,13 @@ module.exports = router;
 
 /**
  * @swagger
- * /game/balance/{userId}:
+ * /game/balance/{user_id}:
  *   patch:
  *     summary: Updates user Total Points based on their earning and  and return current balance
  *     tags: [Game]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
@@ -104,13 +108,13 @@ module.exports = router;
 
 /**
  * @swagger
- * /game/history/{userId}:
+ * /game/history/{user_id}:
  *   get:
  *     summary: Get earnings history of a user
  *     tags: [Game]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
@@ -157,13 +161,13 @@ module.exports = router;
 
 /**
  * @swagger
- * /game/gameDecision/{userId}:
+ * /game/gameDecision/{user_id}:
  *   post:
  *     summary: Record a game Outcome
  *     tags: [Game]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
@@ -177,7 +181,7 @@ module.exports = router;
  *             properties:
  *               decision:
  *                 type: string
- *               stakeAmount:
+ *               stake_Amount:
  *                 type: number
  *     responses:
  *       200:

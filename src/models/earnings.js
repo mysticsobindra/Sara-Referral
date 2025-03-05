@@ -1,3 +1,5 @@
+
+// 🔹 Third-Party Module Imports (npm packages)
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
@@ -10,7 +12,7 @@ const earningsSchema = new Schema({
     },
     earning_type: {
         type: String,
-        enum: ['Deposit', 'Game_Played' ],
+        enum: ['Deposit', 'game_played' ],
         required: true
     },
     points_earned: {

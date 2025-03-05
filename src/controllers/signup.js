@@ -1,32 +1,35 @@
-const userModel = require("../models/User");
+// 🔹 Third-Party Module Imports (npm packages)
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const Referral = require("../models/referrals");
-const referralEarnings = require("../models/referralEarnings");
 
-const saltRounds = 10;
+// 🔹 Internal Module Imports (Project files)
+const user_model = require("../models/User");
+const referral_model = require("../models/referrals");
+const referral_earnings = require("../models/referralEarnings");
+const platform_setting = require("../models/setting");
+
+const salt_rounds = 10;
 
 /**
  * Registers a new user.
  *
  * @async
- * @function register_User
+ * @function register_user
  * @param {Object} req - The request object.
  * @param {Object} req.body - The body of the request.
  * @param {string} req.body.email - The email of the user.
  * @param {string} req.body.password - The password of the user.
- * @param {Object} req.params - The parameters of the request.
- * @param {string} req.params.referralCode - The referral code (optional).
+ * @param {Object} req.query - The query parameters of the request.
+ * @param {string} req.query.referral_code - The referral code (optional).
  * @param {Object} res - The response object.
  * @returns {Promise<void>} Sends a response with the status and message.
  * @throws {Error} If there is an error during user registration.
  */
-
-async function register_User(req, res) {
+async function register_user(req, res) {
   // Extract the email and password from the request body
   const { email, password } = req.body;
-  const referral_Code = req.query.referralCode;
-  
+  const referral_code = req.query.referral_code;
+
   // Check if the email and password are provided
   if (!email || !password) {
     return res.status(400).send("Email and password are required");
@@ -34,73 +37,80 @@ async function register_User(req, res) {
 
   try {
     // Check if the user already exists
-    const existing_User = await userModel.findOne({ email: email });
-    if (existing_User) {
+    const existing_user = await user_model.findOne({ email: email });
+
+    // If the user exists, return an error
+    if (existing_user) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
     // Hash the password
-    const hashed_Password = await bcrypt.hash(password, saltRounds);
+    const hashed_password = await bcrypt.hash(password, salt_rounds);
 
     // Generate a unique referral code
-    let new_Referral_Code;
+    let new_referral_code;
     let isUnique = false;
     while (!isUnique) {
-      new_Referral_Code = crypto.randomBytes(3).toString("hex");
-      const existing_User = await userModel.findOne({
-        referral_code: new_Referral_Code,
+      new_referral_code = crypto.randomBytes(3).toString("hex");
+      const existing_Referral_User = await user_model.findOne({
+        referral_code: new_referral_code,
       });
-      if (!existing_User) {
+      if (!existing_Referral_User) {
         isUnique = true;
       }
     }
 
     // Check if the referral code is valid
-    let referring_User;
-    if (referral_Code) {
-      referring_User = await userModel.findOne({ referral_code: referral_Code });
-      if (!referring_User) {
+    let referring_user;
+    if (referral_code) {
+      referring_user = await user_model.findOne({
+        referral_code: referral_code,
+      });
+      if (!referring_user) {
         return res.status(404).json({ message: "Invalid referral code" });
       }
     }
 
     // Create a new user
-    const newUser = new userModel({
+    const new_user = new user_model({
       email: email,
-      password: hashed_Password,
-      referral_code: new_Referral_Code,
-      referred_By: referring_User ? referring_User._id : null,
+      password: hashed_password,
+      referral_code: new_referral_code,
+      referred_by: referring_user ? referring_user._id : null,
     });
 
-    await newUser.save();
+    await new_user.save();
 
-    // If the user was referred, signup with referral code and create a referral record
-    if (referring_User) {
+    // If the user was referred, create a referral record and referral earning record
+    if (referring_user) {
       // Create a new referral record
-      const new_Referral = new Referral({
-        referrer_id: referring_User._id,
-        referred_id: newUser._id,
+      const new_referral = new referral_model({
+        referrer_id: referring_user._id,
+        referred_id: new_user._id,
       });
+
+      let settings = await platform_setting.findOne();
 
       // Create a new referral earning record
-      const referralEarning = new referralEarnings({
-        referrer_id: referring_User._id,
-        referred_id: newUser._id,
+      const referral_earning = new referral_earnings({
+        referrer_id: referring_user._id,
+        referred_id: new_user._id,
         earning_type: "New_Referral",
-        points_earned: 100,
+        points_earned: settings ? settings.new_referral_points : 100,
       });
-     
+
       // Save the referral and referral earning records
-      await new_Referral.save();
-      await referralEarning.save();
+      await new_referral.save();
+      await referral_earning.save();
     }
 
     res
       .status(201)
-      .send({ message: "User created successfully", user: newUser });
+      .send({ message: "User created successfully", user: new_user });
   } catch (error) {
+    console.log(error);
     res.status(500).send("Error registering user: " + error.message);
   }
 }
 
-module.exports = { register_User };
+module.exports = { register_user };

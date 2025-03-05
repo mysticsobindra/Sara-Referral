@@ -1,21 +1,22 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const jwt = require("jsonwebtoken");
 
 // Function to generate an access token
- function generateToken(payload, Token_Secret, expires = "1h") {
-return jwt.sign(payload, Token_Secret, { expiresIn: expires });
+ function generate_token(payload, token_secret, expires = "1h") {
+return jwt.sign(payload, token_secret, { expiresIn: expires });
 
 }
 
 // Function to verify an access token
-function verifyToken(token, Token_Secret , callbackFunction = null) {
+function verify_token(token, token_secret , callback_function = null) {
   try {
-    return jwt.verify(token, Token_Secret , callbackFunction);
+    return jwt.verify(token, token_secret , callback_function);
   } catch (error) {
     return null;
   }
 }
 
 module.exports = {
-  generateToken,
-  verifyToken,
+  generate_token,
+  verify_token,
 };

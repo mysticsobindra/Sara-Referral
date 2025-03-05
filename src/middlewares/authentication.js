@@ -1,5 +1,8 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const jwt = require("jsonwebtoken");
-const { verifyToken } = require("../services/Token");
+
+// 🔹 Internal Module Imports (Project files)
+const { verify_token } = require("../services/Token");
 
 /**
  * Middleware to authenticate the access token from the request cookies.
@@ -14,7 +17,7 @@ const { verifyToken } = require("../services/Token");
  *                     or calls the next middleware function if the token is valid.
  */
 
-const authenticateToken = (req, res, next) => {
+const authenticate_token = (req, res, next) => {
 
   if (!req.headers.cookie) {
     return res.status(401).json({ message: "cookie is missing" });
@@ -27,7 +30,7 @@ const authenticateToken = (req, res, next) => {
   }
 
   try {
-    const verified = verifyToken(Access_Token, process.env.ACCESS_TOKEN_SECRET);
+    const verified = verify_token(Access_Token, process.env.ACCESS_TOKEN_SECRET);
 
     if (!verified) {
       return res.status(403).json({ message: "access token is invalid" });
@@ -41,4 +44,4 @@ const authenticateToken = (req, res, next) => {
   
 };
 
-module.exports = { authenticateToken };
+module.exports = { authenticate_token };

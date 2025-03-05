@@ -1,8 +1,10 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const userModel = require('../models/User');
-const { generateToken } = require('../services/Token');
-const RefreshToken = require('../models/refreshToken');
+
+// 🔹 Internal Module Imports (Project files)
+const user_model = require('../models/User');
+const { generate_token } = require('../services/Token');
 
 /**
  * Handles user login by verifying email and password, generating a JWT token, and setting it as a cookie.
@@ -22,7 +24,7 @@ async function Login(req, res) {
     const { email, password } = req.body;
     try {
         // Check if the user exists
-        const user = await userModel.findOne({ email });
+        const user = await user_model.findOne({ email });
 
         // If the user does not exist, return an error
         if (!user) {
@@ -30,21 +32,18 @@ async function Login(req, res) {
         }
 
         // Check if the password is correct
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
+        const is_match = await bcrypt.compare(password, user.password);
+        if (!is_match) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
         // Generate a access and refresh token
-        const ACCESS_TOKEN=  generateToken({...user}, process.env.ACCESS_TOKEN_SECRET,"15min")
-        const REFRESH_TOKEN=  generateToken({...user}, process.env.REFRESH_TOKEN_SECRET,'7d')
-
-        // Save the refresh token in the database
-        await RefreshToken.create({ refresh_Token: REFRESH_TOKEN, userId: user._id });
-
+        const access_token=  generate_token({...user}, process.env.ACCESS_TOKEN_SECRET,"15min")
+        const refresh_token=  generate_token({...user}, process.env.REFRESH_TOKEN_SECRET,'7d')
+        
         // Set the access and refresh token as cookies
-        res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, { httpOnly: true, maxAge: 60 * 60 * 1000 });
-        res.cookie('REFRESH_TOKEN', REFRESH_TOKEN, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+        res.cookie('access_token', access_token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+        res.cookie('refresh_token', refresh_token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
 
         return res.json({ message: 'Login successful' });
 

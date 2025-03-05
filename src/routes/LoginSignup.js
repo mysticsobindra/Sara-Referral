@@ -1,12 +1,15 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const express = require("express");
 const router = express.Router();
-const { register_User } = require("../controllers/signup");
-const { Login } = require("../controllers/login");
-const { refresh_Token } = require("../controllers/refreshToken");
 
-router.post("/register", register_User);
+// 🔹 Internal Module Imports (Project files)
+const { register_user } = require("../controllers/signup");
+const { Login } = require("../controllers/login");
+const { refresh_token } = require("../controllers/refreshToken");
+
+router.post("/register", register_user);
 router.post("/login", Login);
-router.post("/refresh-token", refresh_Token);
+router.post("/refresh-token", refresh_token);
 
 module.exports = router;
 
@@ -57,7 +60,7 @@ module.exports = router;
  *                     referral_code:
  *                       type: string
  *                       example: 338cc6
- *                     referred_By:
+ *                     referred_by:
  *                       type: string
  *                       example: 67b84da07e39006ca19a81b2
  *                     Balance:
@@ -66,7 +69,7 @@ module.exports = router;
  *                     _id:
  *                       type: string
  *                       example: 67c3f66972b075a6b634a130
- *                     created_At:
+ *                     created_at:
  *                       type: string
  *                       example: 2025-03-02T06:10:49.583Z
  *                     __v:

@@ -1,7 +1,8 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 
-const gameSchema = new mongoose.Schema({
+const game_schema = new mongoose.Schema({
     _id: {
         type: String,
         default: uuidv4
@@ -34,6 +35,6 @@ const gameSchema = new mongoose.Schema({
     }
 });
 
-const Game = mongoose.model('GameTransactions', gameSchema);
+const Game = mongoose.model('GameTransactions', game_schema);
 
 module.exports = Game;

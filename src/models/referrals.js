@@ -1,8 +1,9 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const referralSchema = new Schema({
+const referral_schema = new Schema({
     referrer_id: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -23,6 +24,6 @@ const referralSchema = new Schema({
     }
 });
 
-const Referral = mongoose.model('Referral', referralSchema);
+const Referral = mongoose.model('Referral', referral_schema);
 
 module.exports = Referral;

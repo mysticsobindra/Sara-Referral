@@ -1,12 +1,16 @@
+// 🔹 Third-Party Module Imports (npm packages)
 const express = require("express");
-const router = express.Router()
-const {  Generate_Referral_Code, get_Top_Referrals, get_Your_Referrals, validate_Referral_Code, get_Referral_History  } = require("../controllers/referral");
 
-router.post("/generate", Generate_Referral_Code);
-router.get("/validate/:referralCode", validate_Referral_Code);
-router.get("/history/:userId", get_Referral_History);
-router.get("/yourReferrals/:userId", get_Your_Referrals);
-router.get("/topReferrals", get_Top_Referrals);
+// 🔹 Internal Module Imports (Project files)
+const {  generate_referral_code, get_top_referrals, get_your_referrals, validate_referral_code, get_referral_history  } = require("../controllers/referral");
+
+const router = express.Router()
+
+router.post("/generate", generate_referral_code);
+router.get("/validate/:referral_code", validate_referral_code);
+router.get("/history/:user_id", get_referral_history);
+router.get("/yourReferrals/:user_id", get_your_referrals);
+router.get("/topReferrals", get_top_referrals);
 
 
 module.exports = router;
@@ -38,7 +42,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /referral/validate/{referralCode}:
+ * /referral/validate/{referral_code}:
  *   get:
  *     summary: Validate a referral code
  *     tags: [Referral]
@@ -72,13 +76,13 @@ module.exports = router;
 
 /**
  * @swagger
- * /referral/history/{userId}:
+ * /referral/history/{user_id}:
  *   get:
  *     summary: Get referral history of a user
  *     tags: [Referral]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
@@ -146,13 +150,13 @@ module.exports = router;
 
 /**
  * @swagger
- * /referral/yourReferrals/{userId}:
+ * /referral/yourReferrals/{user_id}:
  *   get:
  *     summary: Get your referrals and total points gained
  *     tags: [Referral]
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: user_id
  *         schema:
  *           type: string
  *         required: true
