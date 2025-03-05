@@ -61,7 +61,7 @@ const Login =async_error_handler (async (req, res, next) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  return res.json({ user });
+  return res.status(200).json({ user });
 })
 
 module.exports = { Login };

@@ -29,10 +29,10 @@ const get_settings = async_error_handler(async (req, res, next) => {
       upsert: true,
       new: true,
     });
-    return res.json(default_setting);
+    return res.status(200).json(default_setting);
   }
 
-  return res.json({ settings });
+  return res.status(200).json({ settings });
 });
 
 
@@ -69,7 +69,7 @@ const Update_settings = async_error_handler(async (req, res, next) => {
     duration_filter_data: duration_filter_data,
   };
 
-  console.log(New_Settings);
+
 
   const updated_Settings = await platform_setting.findOneAndUpdate(
     {},
@@ -77,7 +77,7 @@ const Update_settings = async_error_handler(async (req, res, next) => {
     { upsert: true, new: true }
   );
 
-  return res.json(updated_Settings);
+  return res.status(200).json(updated_Settings);
 });
 
 module.exports = {

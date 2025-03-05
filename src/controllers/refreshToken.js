@@ -68,7 +68,7 @@ const refresh_token = async (req, res) => {
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
-      return res.json({ message: "Access token refreshed successfully" });
+      return res.status(200).json({ message: "Access token refreshed successfully" });
     }
   );
 };
