@@ -246,7 +246,7 @@ const get_top_referrals = async_error_handler(async (req, res, next) => {
       referrer_id: { $in: referrerIds }
     });
   
-console.log("referrals",referrals)
+
 
     // Create an object to store the top referrers and their details
     const top_referrer_details = {};
@@ -258,7 +258,7 @@ console.log("referrals",referrals)
         earning => earning.referrer_id.toString() === referral.referrer_id.toString()
       );
   
-console.log("earnings",earnings)
+
 
       // Calculate the total points earned by the referrer
       let total_points = 0;

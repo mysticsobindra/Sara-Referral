@@ -75,6 +75,8 @@ module.exports = router;
  *                   __v: 0
  *       400:
  *         description: Bad request
+ *       500:
+ *         description: Server error
  */
 
 /**
@@ -104,6 +106,8 @@ module.exports = router;
  *                 CurrentBalance: 2400
  *       400:
  *         description: Bad request
+ *      500:
+ *         description: Server error
  */
 
 /**
@@ -157,6 +161,8 @@ module.exports = router;
  *                     __v: 0
  *       400:
  *         description: Bad request
+ *      500:
+ *         description: Server error
  */
 
 /**
@@ -242,4 +248,6 @@ module.exports = router;
  *                   __v: 0
  *       400:
  *         description: Bad request
+ *      500:
+ *         description: Server error
  */

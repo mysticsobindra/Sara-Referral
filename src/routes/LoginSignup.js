@@ -78,7 +78,7 @@ module.exports = router;
  *       400:
  *         description: Bad request
  *       404:
- *         description: Invalid referral code
+ *         description:  referral code not found
  *       500:
  *         description: Server error
  */
